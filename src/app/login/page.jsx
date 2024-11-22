@@ -1,60 +1,77 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import PlayerControls from "./PlayerControls";
+import { useState } from "react";
+import Link from "next/link";
 
-export default function Player({ currentSong }) {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
+export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  useEffect(() => {
-    if (isPlaying) {
-      const interval = setInterval(() => {
-        setCurrentTime((prevTime) => {
-          const nextTime = prevTime + 1;
-          return nextTime >= currentSong?.duration ? currentSong?.duration : nextTime;
-        });
-      }, 1000);
-
-      return () => clearInterval(interval);
-    }
-  }, [isPlaying, currentSong?.duration]);
-
-  const formatTime = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
-  };
-
-  const handlePlayPause = (playState) => {
-    setIsPlaying(playState);
-    console.log(playState ? "Playing" : "Paused");
+  const handleLogin = (e) => {
+    e.preventDefault();
+    console.log("Logging in with:", { email, password });
+    // Add login functionality here
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-black border-t-2 border-brass text-white z-[9999]">
-      <div className="flex items-center justify-between px-4 py-2">
-        {/* Song Info */}
-        <div className="flex-1">
-          <h3 className="text-lg font-bold truncate">{currentSong?.title || "No Song Playing"}</h3>
-          <p className="text-sm text-gray-400 truncate">{currentSong?.artist || "Unknown Artist"}</p>
+    <div className="min-h-screen flex items-center justify-center bg-black text-white">
+      <div className="w-full max-w-md p-8 space-y-6 bg-gray-900 rounded-lg shadow-lg">
+        <h1 className="text-3xl font-bold text-center text-brass">Login</h1>
+        <p className="text-sm text-gray-400 text-center">
+          Welcome back! Please login to your account.
+        </p>
+        {/* Login Form */}
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div>
+            <label htmlFor="email" className="block text-sm text-gray-300">
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-brass"
+              placeholder="Enter your email"
+            />
+          </div>
+          <div>
+            <label htmlFor="password" className="block text-sm text-gray-300">
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-brass"
+              placeholder="Enter your password"
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full py-2 bg-brass text-black font-bold rounded-lg shadow-lg hover:bg-yellow-600 transition"
+          >
+            Login
+          </button>
+        </form>
+        {/* Divider */}
+        <div className="flex items-center justify-center space-x-2">
+          <span className="h-px w-1/3 bg-gray-700"></span>
+          <span className="text-sm text-gray-400">OR</span>
+          <span className="h-px w-1/3 bg-gray-700"></span>
         </div>
-
-        {/* Player Controls */}
-        <div className="flex-1 flex justify-center">
-          <PlayerControls
-            onPlayPause={handlePlayPause}
-            onNext={() => console.log("Next track")}
-            onPrevious={() => console.log("Previous track")}
-            onRepeat={(isRepeat) => console.log(isRepeat ? "Repeat enabled" : "Repeat disabled")}
-            onRandom={(isRandom) => console.log(isRandom ? "Random enabled" : "Random disabled")}
-          />
-        </div>
-
-        {/* Time Display */}
-        <div className="flex-1 flex justify-end">
+        {/* Register Link */}
+        <div className="text-center">
           <p className="text-sm text-gray-400">
-            {formatTime(currentTime)} / {formatTime(currentSong?.duration || 0)}
+          {"Don't have an account? "}
+            <Link href="/register" className="text-brass hover:underline">
+              Register
+            </Link>
           </p>
         </div>
       </div>
