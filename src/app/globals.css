@@ -19,3 +19,12 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+button:hover {
+  background-color: #b3862b; /* Darker brass color */
+}
+
+a:hover {
+  text-decoration: underline;
+}
+

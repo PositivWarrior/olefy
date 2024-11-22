@@ -1,13 +1,34 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PlayerControls from "./PlayerControls";
 
 export default function Player({ currentSong }) {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+
+  useEffect(() => {
+    if (isPlaying) {
+      const interval = setInterval(() => {
+        setCurrentTime((prevTime) => {
+          const nextTime = prevTime + 1;
+          return nextTime >= currentSong?.duration ? currentSong?.duration : nextTime;
+        });
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [isPlaying, currentSong?.duration]);
+
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
+  };
 
   const handlePlayPause = (playState) => {
     setIsPlaying(playState);
+    console.log(playState ? "Playing" : "Paused");
   };
 
   return (
@@ -22,7 +43,7 @@ export default function Player({ currentSong }) {
         {/* Player Controls */}
         <div className="flex-1 flex justify-center">
           <PlayerControls
-            onPlayPause={(playState) => setIsPlaying(playState)}
+            onPlayPause={handlePlayPause}
             onNext={() => console.log("Next track")}
             onPrevious={() => console.log("Previous track")}
             onRepeat={(isRepeat) => console.log(isRepeat ? "Repeat enabled" : "Repeat disabled")}
@@ -33,7 +54,7 @@ export default function Player({ currentSong }) {
         {/* Time Display */}
         <div className="flex-1 flex justify-end">
           <p className="text-sm text-gray-400">
-            {currentSong?.time || "0:00 / 0:00"}
+            {formatTime(currentTime)} / {formatTime(currentSong?.duration || 0)}
           </p>
         </div>
       </div>

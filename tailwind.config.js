@@ -11,7 +11,8 @@ module.exports = {
     extend: {
       colors: {
         gold: '#D4AF37', // Gold for accents
-        black: '#000000', // Deep black
+        black: '#000000',
+        brass: '#D4AF37', // Deep black
         gray: {
           950: '#121212', // Very dark gray
         },

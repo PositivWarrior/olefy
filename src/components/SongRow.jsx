@@ -1,13 +1,14 @@
-import React from 'react'
-
-export default function SongRow({title, artist}) {
+export default function SongRow({ song, onClick }) {
   return (
-    <div className="flex justify-between p-2 hover:bg-gray-800 rounded-md">
+    <div
+      className="flex justify-between items-center p-3 bg-gray-800 rounded-md hover:bg-gray-700 cursor-pointer"
+      onClick={() => onClick(song)}
+    >
       <div>
-        <h3 className="text-white">{title}</h3>
-        <p className="text-gray-400 text-sm">{artist}</p>
+        <h4 className="text-white">{song.title}</h4>
+        <p className="text-gray-400 text-sm">{song.artist}</p>
       </div>
-      <button className="text-green-500">Play</button>
+      <p className="text-gray-400 text-sm">{song.duration}</p>
     </div>
   );
 }

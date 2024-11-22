@@ -1,11 +1,10 @@
 "use client";
 
-import { use, useState } from "react";
+import React, { useState } from "react"; // Ensure useState is imported
 import SongRow from "../../../components/SongRow";
 import Player from "../../../components/Player";
 
 export default function PlaylistPage({ params: paramsPromise }) {
-  // Unwrap the params promise
   const params = use(paramsPromise);
   const { id } = params;
 
