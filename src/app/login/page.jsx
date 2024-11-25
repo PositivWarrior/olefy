@@ -1,17 +1,40 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const router = useRouter();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Logging in with:", { email, password });
-    // Add login functionality here
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Login successful!", data);
+        // Save token (e.g., localStorage or cookies)
+        localStorage.setItem("token", data.token);
+        router.push("/"); // Redirect to home or another page
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message || "Login failed");
+      }
+    } catch (error) {
+      setError("An unexpected error occurred");
+      console.error("Login error:", error);
+    }
   };
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-black text-white">

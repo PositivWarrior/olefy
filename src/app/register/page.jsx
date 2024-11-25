@@ -1,4 +1,38 @@
-export default function Register() {
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+
+export default function RegisterPage() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const router = useRouter();
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Registration successful!", data);
+        router.push("/login"); // Redirect to login page
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message || "Registration failed");
+      }
+    } catch (error) {
+      setError("An unexpected error occurred");
+      console.error("Registration error:", error);
+    }
+  };
+
     return (
       <div className="min-h-screen flex items-center justify-center bg-black text-white">
         <div className="w-full max-w-md p-8 space-y-6 bg-gray-900 rounded-lg shadow-lg">
@@ -58,4 +92,3 @@ export default function Register() {
       </div>
     );
   }
-  

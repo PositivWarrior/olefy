@@ -1,25 +1,35 @@
-// src/app/library/page.js
-import Header from '../../components/Header';
-import PlaylistCard from '../../components/PlaylistCard';
+"use client";
+
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { fetchSpotifyData } from "../../utils/spotify";
 
 export default function Library() {
-  const savedPlaylists = [
-    { id: 1, title: 'Road Trip', coverImage: '/images/road-trip.jpg' },
-    { id: 2, title: 'Relax & Unwind', coverImage: '/images/relax.jpg' },
-    { id: 3, title: 'Focus Beats', coverImage: '/images/focus.jpg' },
-  ];
+  const { data: session } = useSession();
+  const [playlists, setPlaylists] = useState([]);
+
+  useEffect(() => {
+    if (session) {
+      fetchSpotifyData(session.accessToken, "me/playlists").then((data) => {
+        setPlaylists(data.items);
+      });
+    }
+  }, [session]);
+
+  if (!session) {
+    return <p>Please log in to see your library.</p>;
+  }
 
   return (
-    <div>
-      <Header title="Your Library" />
-      <div className="p-5">
-        <h2 className="text-2xl text-white mb-4">Saved Playlists</h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {savedPlaylists.map((playlist) => (
-            <PlaylistCard key={playlist.id} {...playlist} />
-          ))}
-        </div>
-      </div>
+    <div className="p-4 text-white">
+      <h1 className="text-3xl font-bold mb-4">Your Playlists</h1>
+      <ul>
+        {playlists.map((playlist) => (
+          <li key={playlist.id} className="mb-2">
+            {playlist.name}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
