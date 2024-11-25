@@ -23,10 +23,6 @@ export default function Player({ currentSong }) {
         <div className="flex-1 flex justify-center">
           <PlayerControls
             onPlayPause={(playState) => setIsPlaying(playState)}
-            onNext={() => console.log("Next track")}
-            onPrevious={() => console.log("Previous track")}
-            onRepeat={(isRepeat) => console.log(isRepeat ? "Repeat enabled" : "Repeat disabled")}
-            onRandom={(isRandom) => console.log(isRandom ? "Random enabled" : "Random disabled")}
           />
         </div>
 

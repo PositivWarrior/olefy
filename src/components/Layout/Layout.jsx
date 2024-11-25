@@ -9,16 +9,12 @@ export default function Layout({ children }) {
     <html lang="en">
       <body className="bg-black text-white">
         <div className="flex">
-          {/* Sidebar */}
           <Sidebar />
-          {/* Main Content */}
           <div className="flex-1 flex flex-col">
             <main className="min-h-[calc(100vh-160px)] pb-[160px]">{children}</main>
-           {/* Player */}
             <Player />
           </div>
         </div>
-         {/* Footer */}
          <Footer /> 
       </body>
     </html>
